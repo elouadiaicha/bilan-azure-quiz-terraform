@@ -1,13 +1,18 @@
-resource "azurerm_redis_cache" "redis" {
+resource "azurerm_managed_redis" "redis" {
   name                = var.redis_name
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  capacity = var.capacity
-  family   = var.family
-  sku_name = var.sku_name
+  sku_name                  = "Balanced_B0"
+  high_availability_enabled = false
+  public_network_access     = "Enabled"
 
-  minimum_tls_version = "1.2"
+  default_database {
+    access_keys_authentication_enabled = true
+    client_protocol                    = "Encrypted"
+    clustering_policy                  = "OSSCluster"
+    eviction_policy                    = "VolatileLRU"
+  }
 
   tags = var.tags
 }

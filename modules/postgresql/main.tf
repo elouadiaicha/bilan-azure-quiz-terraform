@@ -2,6 +2,7 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
   name                = var.server_name
   resource_group_name = var.resource_group_name
   location            = var.location
+  zone                = "1"
 
   administrator_login    = var.admin_username
   administrator_password = var.admin_password
