@@ -28,3 +28,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "allowed_subnet_ids" {
+  description = "Liste des subnets autorisés à accéder au Storage Account"
+  type        = list(string)
+  default     = []
+}

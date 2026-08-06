@@ -49,12 +49,13 @@ module "postgresql" {
 module "storage" {
   source = "./modules/storage"
 
-  storage_account_name = var.storage_account_name
-  resource_group_name  = data.azurerm_resource_group.main.name
-  location             = data.azurerm_resource_group.main.location
-
+  storage_account_name     = var.storage_account_name
+  resource_group_name      = data.azurerm_resource_group.main.name
+  location                 = data.azurerm_resource_group.main.location
   storage_account_tier     = var.storage_account_tier
   storage_replication_type = var.storage_replication_type
+
+  allowed_subnet_ids = [module.network.backend_subnet_id]
 
   tags = var.tags
 }
