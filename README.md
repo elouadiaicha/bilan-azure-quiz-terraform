@@ -1,111 +1,106 @@
-# Azure Quiz – Terraform
+# Azure Quiz – Infrastructure as Code
 
-## Présentation
+## 📖 Description
 
-Ce dépôt contient l'ensemble de l'infrastructure Azure du projet **Azure Quiz**, provisionnée avec **Terraform**.
+Ce dépôt contient l'ensemble de l'infrastructure Azure du projet **Azure Quiz**, déployée avec **Terraform**.
 
-L'objectif est de déployer une infrastructure **reproductible, modulaire et automatisée** permettant d'héberger une application composée d'un **frontend Angular**, d'un **backend Spring Boot** ainsi que des différents services Azure nécessaires à son fonctionnement.
+L'objectif est de provisionner automatiquement les ressources Azure nécessaires au fonctionnement de l'application tout en appliquant les bonnes pratiques d'Infrastructure as Code (IaC), de sécurité et de CI/CD.
 
-Ce projet s'inscrit dans une démarche **Infrastructure as Code (IaC)** et applique plusieurs bonnes pratiques DevOps afin de garantir la maintenabilité, la sécurité et l'automatisation des déploiements.
-
-Les principales pratiques mises en œuvre sont :
-
-- Infrastructure modulaire avec Terraform
-- Backend Terraform distant sur Azure Storage
-- Pipeline CI/CD avec GitHub Actions
-- Authentification GitHub ↔ Azure via OpenID Connect (OIDC)
-- Gestion collaborative avec CODEOWNERS
-- Mise à jour automatique des dépendances avec Dependabot
-- Documentation des décisions d'architecture (ADR)
+L'infrastructure est modulaire afin de faciliter sa maintenance, sa réutilisation et son évolution.
 
 ---
 
-# Architecture
+# 🏗️ Architecture
 
-Le projet repose sur une architecture Cloud native composée des services Azure suivants :
+L'infrastructure déploie les ressources Azure suivantes :
 
-| Ressource | Service Azure | Rôle |
-|-----------|---------------|------|
-| Resource Group | Azure Resource Group | Regroupe l'ensemble des ressources du projet |
-| Storage | Azure Storage Account | Stockage des fichiers et backend Terraform |
-| Key Vault | Azure Key Vault | Gestion sécurisée des secrets |
-| PostgreSQL | Azure Database for PostgreSQL Flexible Server | Base de données relationnelle |
-| Redis | Azure Managed Redis | Cache distribué |
-| Backend | Azure App Service (Linux) | Hébergement de l'API Spring Boot |
-| Frontend | Azure Static Web App | Hébergement de l'application Angular |
+- Azure App Service (Backend Spring Boot)
+- Azure Static Web App (Frontend Angular)
+- Azure Database for PostgreSQL Flexible Server
+- Azure Managed Redis
+- Azure Storage Account
+- Azure Key Vault
 
-## Schéma d'architecture
+Le Resource Group ainsi que l'App Service Plan sont fournis par l'environnement de formation et sont récupérés via des **data sources Terraform**.
 
-![Architecture](docs/architecture.png)
+Le schéma d'architecture est disponible dans :
 
----
-
-# Structure du projet
-
+```text
+docs/architecture.png
 ```
+
+---
+
+# 📁 Structure du projet
+
+```text
 .
+├── .github/
+│   └── workflows/
+│
+├── docs/
+│   ├── architecture.drawio
+│   └── architecture.png
+│
+├── modules/
+│   ├── app-service/
+│   ├── key_vault/
+│   ├── postgresql/
+│   ├── redis/
+│   ├── static-web-app/
+│   └── storage/
+│
 ├── backend.tf
+├── main.tf
+├── outputs.tf
 ├── providers.tf
 ├── variables.tf
-├── outputs.tf
 ├── versions.tf
-├── main.tf
-│
-├── modules
-│   ├── app-service
-│   ├── key_vault
-│   ├── postgresql
-│   ├── redis
-│   ├── static-web-app
-│   └── storage
-│
-├── docs
-│   ├── architecture.drawio
-│   ├── architecture.png
-│   └── adr
-│
-└── .github
-    ├── workflows
-    └── dependabot.yml
+├── terraform.tfvars
+└── README.md
 ```
-
-L'infrastructure est organisée sous forme de modules Terraform afin de favoriser la réutilisabilité, la maintenance et la lisibilité du code.
 
 ---
 
-# Déploiement
+# ⚙️ Technologies utilisées
 
-## Prérequis
+- Terraform
+- Microsoft Azure
+- AzureRM Provider
+- GitHub Actions
+- OpenID Connect (OIDC)
+- Trivy
+- Gitleaks
 
-- Terraform 1.9 ou supérieur
-- Azure CLI
-- Un abonnement Azure
-- Authentification Azure
+---
 
-```bash
-az login
-```
+# 🚀 Déploiement
 
-## Initialisation
+Initialisation :
 
 ```bash
 terraform init
 ```
 
-## Validation
+Validation :
 
 ```bash
-terraform fmt -recursive
 terraform validate
 ```
 
-## Génération du plan
+Vérification du format :
+
+```bash
+terraform fmt -recursive
+```
+
+Prévisualisation :
 
 ```bash
 terraform plan
 ```
 
-## Déploiement
+Déploiement :
 
 ```bash
 terraform apply
@@ -113,60 +108,89 @@ terraform apply
 
 ---
 
-# Backend Terraform
+# 🔒 Sécurité
 
-Le fichier **terraform.tfstate** est stocké dans un backend Azure Blob Storage.
+Plusieurs mécanismes de sécurité ont été mis en œuvre :
 
-Cette configuration offre plusieurs avantages :
-
-- stockage centralisé du state
-- verrouillage des déploiements
-- collaboration entre plusieurs développeurs
-- sécurisation de l'état de l'infrastructure
+- Authentification GitHub → Azure via OpenID Connect (OIDC)
+- Backend Terraform distant sur Azure Storage
+- Analyse de sécurité de l'infrastructure avec Trivy
+- Détection de secrets avec Gitleaks
+- Protection des branches avec CODEOWNERS
+- Mise à jour automatique des dépendances via Dependabot
+- Accès réseau restreint au Storage Account
+- Accès réseau restreint au Key Vault
+- Chiffrement des communications en TLS 1.2
 
 ---
 
-# CI/CD
+# 🔄 Intégration Continue
 
-Le projet est intégré à **GitHub Actions**.
+Le pipeline GitHub Actions exécute automatiquement :
 
-À chaque Pull Request ou Push, la pipeline exécute automatiquement :
-
-- Terraform Format
+- Vérification du format Terraform
 - Terraform Validate
 - Terraform Plan
-- Terraform Apply (sur la branche `main`)
-
-L'authentification entre GitHub et Azure est réalisée via **OpenID Connect (OIDC)** afin d'éviter l'utilisation de secrets Azure permanents.
-
----
-
-# Documentation
-
-Le dossier **docs/** contient :
-
-- le schéma d'architecture
-- les Architecture Decision Records (ADR)
-- les éléments de conception du projet
+- Terraform Apply (uniquement sur la branche `main`)
+- Analyse de sécurité Trivy
+- Analyse de secrets Gitleaks
 
 ---
 
-# Technologies
+# 📑 Modules Terraform
 
-- Terraform
-- Microsoft Azure
-- Azure App Service
-- Azure Static Web Apps
-- Azure Database for PostgreSQL
-- Azure Managed Redis
-- Azure Key Vault
-- GitHub Actions
-- OpenID Connect (OIDC)
+Le projet est organisé en modules indépendants :
+
+| Module | Description |
+|---------|-------------|
+| app-service | Déploiement du backend Spring Boot |
+| static-web-app | Déploiement du frontend Angular |
+| postgresql | Base de données PostgreSQL Flexible Server |
+| redis | Azure Managed Redis |
+| storage | Azure Storage Account |
+| key_vault | Azure Key Vault |
 
 ---
 
-# Auteur
+# 🧱 Backend Terraform
+
+Le fichier d'état Terraform est stocké dans un **Azure Storage Account** afin de permettre :
+
+- un état distant partagé ;
+- le verrouillage du state ;
+- une meilleure collaboration.
+
+---
+
+# 📄 Architecture Decision Records (ADR)
+
+Les principales décisions techniques sont documentées dans les ADR du projet, notamment :
+
+- utilisation de Terraform comme outil d'Infrastructure as Code ;
+- authentification Azure via OpenID Connect ;
+- utilisation d'un backend Terraform distant ;
+- sécurisation des ressources Azure.
+
+---
+
+# 📚 Bonnes pratiques mises en œuvre
+
+- Infrastructure modulaire
+- Variables centralisées
+- Outputs Terraform
+- Tags sur les ressources Azure
+- Backend distant
+- Authentification sans secret grâce à OIDC
+- Analyse de sécurité automatisée
+- Détection de secrets
+- Déploiement automatisé via GitHub Actions
+
+---
+
+# 👤 Auteur
 
 **Aicha Elouadi**
 
-Formation **Simplon – Administrateur Cloud Azure**
+Formation **Administrateur Cloud & DevOps – Simplon**
+
+2026
