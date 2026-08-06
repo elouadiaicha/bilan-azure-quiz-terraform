@@ -20,6 +20,8 @@ env:
   ARM_USE_OIDC: "true"
 
   TF_VAR_service_plan_resource_group_name: "rg-shared-prf2026"
+  TF_VAR_static_web_app_name: "stapp-quiz-aelouadi"
+  TF_VAR_postgresql_admin_password: ${{ secrets.POSTGRESQL_ADMIN_PASSWORD }}
 
 jobs:
   validate:
