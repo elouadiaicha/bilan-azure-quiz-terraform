@@ -4,10 +4,18 @@ resource "azurerm_key_vault" "kv" {
   resource_group_name = var.resource_group_name
   tenant_id           = var.tenant_id
 
+
   sku_name = "standard"
 
   purge_protection_enabled   = false
   soft_delete_retention_days = 7
 
   tags = var.tags
+
+  network_acls {
+    bypass                     = "AzureServices"
+    default_action             = "Deny"
+    ip_rules                   = []
+    virtual_network_subnet_ids = var.allowed_subnet_ids
+  }
 }

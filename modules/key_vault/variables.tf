@@ -23,3 +23,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "allowed_subnet_ids" {
+  description = "Subnets autorisés à accéder au Key Vault"
+  type        = list(string)
+  default     = []
+}

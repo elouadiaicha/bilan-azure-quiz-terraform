@@ -227,3 +227,30 @@ variable "tags" {
     ManagedBy   = "Terraform"
   }
 }
+
+# ==========================================
+# 9. modules backend, Storage et Key Vault
+# ==========================================
+variable "virtual_network_name" {
+  description = "Nom du réseau virtuel Azure Quiz"
+  type        = string
+  default     = "vnet-quiz-aelouadi"
+}
+
+variable "backend_subnet_name" {
+  description = "Nom du subnet d’intégration du backend"
+  type        = string
+  default     = "snet-backend"
+}
+
+variable "virtual_network_address_space" {
+  description = "Plage d’adresses du réseau virtuel"
+  type        = list(string)
+  default     = ["10.20.0.0/16"]
+}
+
+variable "backend_subnet_prefixes" {
+  description = "Plage d’adresses du subnet backend"
+  type        = list(string)
+  default     = ["10.20.1.0/24"]
+}
