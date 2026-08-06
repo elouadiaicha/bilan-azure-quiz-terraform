@@ -10,9 +10,10 @@ resource "azurerm_storage_account" "storage" {
   min_tls_version            = "TLS1_2"
 
   network_rules {
-    default_action = "Deny"
-    bypass         = ["AzureServices"]
-    ip_rules       = var.allowed_ip_rules
+    default_action             = "Deny"
+    bypass                     = ["AzureServices"]
+    ip_rules                   = var.allowed_ip_rules
+    virtual_network_subnet_ids = []
   }
 
   tags = var.tags

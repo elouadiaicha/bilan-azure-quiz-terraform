@@ -9,9 +9,10 @@ resource "azurerm_key_vault" "kv" {
   purge_protection_enabled   = false
 
   network_acls {
-    bypass         = "AzureServices"
-    default_action = "Deny"
-    ip_rules       = var.allowed_ip_rules
+    bypass                     = "AzureServices"
+    default_action             = "Deny"
+    ip_rules                   = var.allowed_ip_rules
+    virtual_network_subnet_ids = []
   }
 
   tags = var.tags
