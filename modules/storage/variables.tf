@@ -34,3 +34,9 @@ variable "allowed_subnet_ids" {
   type        = list(string)
   default     = []
 }
+
+variable "allowed_ip_rules" {
+  description = "Adresses IP autorisées à accéder au Storage Account"
+  type        = list(string)
+  default     = []
+}

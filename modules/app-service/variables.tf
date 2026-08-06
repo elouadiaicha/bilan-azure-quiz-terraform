@@ -35,8 +35,3 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
-
-variable "virtual_network_subnet_id" {
-  description = "Identifiant du subnet d’intégration App Service"
-  type        = string
-}

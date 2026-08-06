@@ -1,9 +1,8 @@
 resource "azurerm_linux_web_app" "backend" {
-  name                      = var.app_name
-  location                  = var.location
-  resource_group_name       = var.resource_group_name
-  service_plan_id           = var.service_plan_id
-  virtual_network_subnet_id = var.virtual_network_subnet_id
+  name                = var.app_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  service_plan_id     = var.service_plan_id
 
   https_only = true
 

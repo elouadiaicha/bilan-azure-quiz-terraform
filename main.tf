@@ -20,14 +20,13 @@ data "azurerm_client_config" "current" {}
 module "backend" {
   source = "./modules/app-service"
 
-  app_name                  = var.backend_app_name
-  location                  = data.azurerm_resource_group.main.location
-  resource_group_name       = data.azurerm_resource_group.main.name
-  service_plan_id           = data.azurerm_service_plan.shared.id
-  java_version              = var.backend_java_version
-  environment               = var.environment
-  tags                      = var.tags
-  virtual_network_subnet_id = module.network.backend_subnet_id
+  app_name            = var.backend_app_name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
+  service_plan_id     = data.azurerm_service_plan.shared.id
+  java_version        = var.backend_java_version
+  environment         = var.environment
+  tags                = var.tags
 }
 module "postgresql" {
   source = "./modules/postgresql"
@@ -55,7 +54,7 @@ module "storage" {
   storage_account_tier     = var.storage_account_tier
   storage_replication_type = var.storage_replication_type
 
-  allowed_subnet_ids = [module.network.backend_subnet_id]
+  allowed_ip_rules = module.backend.outbound_ip_address_list
 
   tags = var.tags
 }
@@ -66,8 +65,9 @@ module "key_vault" {
   resource_group_name = data.azurerm_resource_group.main.name
   location            = data.azurerm_resource_group.main.location
   tenant_id           = data.azurerm_client_config.current.tenant_id
-  allowed_subnet_ids  = [module.network.backend_subnet_id]
-  tags                = var.tags
+  allowed_ip_rules    = module.backend.outbound_ip_address_list
+
+  tags = var.tags
 }
 module "redis" {
   source = "./modules/redis"
@@ -91,18 +91,6 @@ module "frontend" {
 
   sku_tier = var.static_web_app_sku_tier
   sku_size = var.static_web_app_sku_size
-
-  tags = var.tags
-}
-module "network" {
-  source = "./modules/network"
-
-  virtual_network_name    = var.virtual_network_name
-  backend_subnet_name     = var.backend_subnet_name
-  resource_group_name     = data.azurerm_resource_group.main.name
-  location                = data.azurerm_resource_group.main.location
-  address_space           = var.virtual_network_address_space
-  backend_subnet_prefixes = var.backend_subnet_prefixes
 
   tags = var.tags
 }

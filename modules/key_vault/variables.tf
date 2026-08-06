@@ -29,3 +29,9 @@ variable "allowed_subnet_ids" {
   type        = list(string)
   default     = []
 }
+
+variable "allowed_ip_rules" {
+  description = "Adresses IP autorisées à accéder au Key Vault"
+  type        = list(string)
+  default     = []
+}

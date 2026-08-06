@@ -17,3 +17,8 @@ output "principal_id" {
   description = "Identifiant de l'identité managée du backend"
   value       = azurerm_linux_web_app.backend.identity[0].principal_id
 }
+
+output "outbound_ip_address_list" {
+  description = "Adresses IP sortantes utilisées par l'App Service backend"
+  value       = azurerm_linux_web_app.backend.outbound_ip_address_list
+}
