@@ -67,7 +67,7 @@ variable "backend_app_name" {
 variable "backend_java_version" {
   description = "Version Java utilisée par le backend Spring Boot"
   type        = string
-  default     = "17"
+  default     = "21"
 }
 
 variable "backend_api_key" {
