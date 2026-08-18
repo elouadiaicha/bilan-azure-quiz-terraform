@@ -40,6 +40,8 @@ resource "azurerm_linux_web_app" "backend" {
     STORAGE_CONTAINER_NAME = var.storage_container_name
 
     BACKEND_API_KEY = var.backend_api_key
+
+    APP_CORS_ALLOWED_ORIGINS = var.frontend_origin
   }
 
   tags = var.tags

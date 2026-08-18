@@ -83,3 +83,7 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+variable "frontend_origin" {
+  description = "Origine autorisée pour les requêtes CORS du frontend"
+  type        = string
+}

@@ -45,6 +45,8 @@ module "backend" {
   backend_api_key = var.backend_api_key
 
   tags = var.tags
+
+  frontend_origin = "https://gentle-moss-091704803.7.azurestaticapps.net"
 }
 module "postgresql" {
   source = "./modules/postgresql"
