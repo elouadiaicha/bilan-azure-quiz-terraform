@@ -40,11 +40,14 @@ variable "project_name" {
 variable "environment" {
   description = "Environnement de déploiement"
   type        = string
-  default     = "dev"
+  default     = "non-production"
 
   validation {
-    condition     = contains(["dev", "test", "staging", "prod"], var.environment)
-    error_message = "L'environnement doit être dev, test, staging ou prod."
+    condition = contains(
+      ["non-production", "dev", "test", "staging", "prod"],
+      var.environment
+    )
+    error_message = "L'environnement doit être non-production, dev, test, staging ou prod."
   }
 }
 
@@ -75,6 +78,12 @@ variable "backend_api_key" {
   type        = string
   sensitive   = true
   default     = ""
+}
+
+variable "storage_container_name" {
+  description = "Nom du conteneur Blob utilisé par l'application"
+  type        = string
+  default     = "quiz-files"
 }
 
 # ==========================================
@@ -253,4 +262,17 @@ variable "backend_subnet_prefixes" {
   description = "Plage d’adresses du subnet backend"
   type        = list(string)
   default     = ["10.20.1.0/24"]
+}
+variable "backend_outbound_ip_addresses" {
+  description = "IP sortantes de l'App Service backend autorisées sur PostgreSQL"
+  type        = list(string)
+
+  default = [
+    "40.89.130.0",
+    "40.89.139.181",
+    "40.89.166.179",
+    "40.89.161.203",
+    "40.79.130.129",
+    "20.111.0.255"
+  ]
 }

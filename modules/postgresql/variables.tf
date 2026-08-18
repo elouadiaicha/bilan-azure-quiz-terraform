@@ -42,3 +42,8 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+variable "allowed_ip_addresses" {
+  description = "Adresses IP autorisées à accéder au serveur PostgreSQL"
+  type        = list(string)
+  default     = []
+}

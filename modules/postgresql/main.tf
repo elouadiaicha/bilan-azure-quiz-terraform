@@ -23,3 +23,11 @@ resource "azurerm_postgresql_flexible_server_database" "database" {
   charset   = "UTF8"
   collation = "en_US.utf8"
 }
+resource "azurerm_postgresql_flexible_server_firewall_rule" "backend" {
+  for_each = toset(var.allowed_ip_addresses)
+
+  name             = "AllowBackend-${replace(each.value, ".", "-")}"
+  server_id        = azurerm_postgresql_flexible_server.postgres.id
+  start_ip_address = each.value
+  end_ip_address   = each.value
+}

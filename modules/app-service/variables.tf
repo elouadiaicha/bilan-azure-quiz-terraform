@@ -21,13 +21,61 @@ variable "service_plan_id" {
 variable "java_version" {
   description = "Version Java utilisée par le backend Spring Boot"
   type        = string
-  default     = "17"
+  default     = "21"
 }
 
 variable "environment" {
   description = "Environnement de déploiement"
   type        = string
   default     = "dev"
+}
+
+variable "postgresql_url" {
+  description = "URL JDBC PostgreSQL"
+  type        = string
+}
+
+variable "postgresql_username" {
+  description = "Utilisateur PostgreSQL"
+  type        = string
+}
+
+variable "postgresql_password" {
+  description = "Mot de passe PostgreSQL"
+  type        = string
+  sensitive   = true
+}
+
+variable "redis_hostname" {
+  description = "Hostname Azure Managed Redis"
+  type        = string
+}
+
+variable "redis_port" {
+  description = "Port Redis"
+  type        = string
+}
+
+variable "redis_password" {
+  description = "Mot de passe Redis"
+  type        = string
+  sensitive   = true
+}
+
+variable "storage_account_name" {
+  description = "Nom du Storage Account"
+  type        = string
+}
+
+variable "storage_container_name" {
+  description = "Nom du container Blob"
+  type        = string
+}
+
+variable "backend_api_key" {
+  description = "Clé API utilisée pour protéger le backend"
+  type        = string
+  sensitive   = true
 }
 
 variable "tags" {

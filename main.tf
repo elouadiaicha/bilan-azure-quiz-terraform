@@ -16,7 +16,6 @@ data "azurerm_client_config" "current" {}
 # ==========================================
 # BACKEND SPRING BOOT
 # ==========================================
-
 module "backend" {
   source = "./modules/app-service"
 
@@ -26,7 +25,26 @@ module "backend" {
   service_plan_id     = data.azurerm_service_plan.shared.id
   java_version        = var.backend_java_version
   environment         = var.environment
-  tags                = var.tags
+
+  # PostgreSQL
+  postgresql_url = "jdbc:postgresql://${module.postgresql.fqdn}:5432/${module.postgresql.database_name}?sslmode=require"
+
+  postgresql_username = var.postgresql_admin_username
+  postgresql_password = var.postgresql_admin_password
+
+  # Azure Managed Redis
+  redis_hostname = module.redis.hostname
+  redis_port     = tostring(module.redis.port)
+  redis_password = module.redis.primary_access_key
+
+  # Azure Storage
+  storage_account_name   = var.storage_account_name
+  storage_container_name = var.storage_container_name
+
+  # Sécurité applicative
+  backend_api_key = var.backend_api_key
+
+  tags = var.tags
 }
 module "postgresql" {
   source = "./modules/postgresql"
@@ -42,6 +60,8 @@ module "postgresql" {
   postgresql_version = var.postgresql_version
   sku_name           = var.postgresql_sku_name
   storage_mb         = var.postgresql_storage_mb
+
+  allowed_ip_addresses = module.backend.outbound_ip_address_list
 
   tags = var.tags
 }
@@ -93,4 +113,9 @@ module "frontend" {
   sku_size = var.static_web_app_sku_size
 
   tags = var.tags
+}
+resource "azurerm_role_assignment" "backend_storage_blob" {
+  scope                = module.storage.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = module.backend.principal_id
 }
