@@ -46,7 +46,7 @@ module "backend" {
 
   tags = var.tags
 
-  frontend_origin = "https://gentle-moss-091704803.7.azurestaticapps.net"
+  frontend_origin = "https://yellow-sand-0399f8b03.7.azurestaticapps.net"
 }
 module "postgresql" {
   source = "./modules/postgresql"
