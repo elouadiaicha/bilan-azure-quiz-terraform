@@ -550,4 +550,4 @@ Ce dépôt contient :
 - les règles de sécurité et d'accès ;
 - les ADR ;
 - le schéma d'architecture ;
-- les pipelines de validation et de déploiement de l'infrastructure.
+- les pipelines de validation et de déploiement de l'infrastructure
